@@ -10,6 +10,7 @@ locals {
   assume_role_arn = "arn:aws:iam::${local.account_id}:role/OrganizationAccountAccessRole"
 }
 
+# TO_FILL
 variable "region" {
   default = "eu-west-1"
 }

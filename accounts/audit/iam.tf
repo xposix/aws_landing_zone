@@ -3,6 +3,7 @@ module "default_iam" {
 
   aws_organizations_accounts = data.aws_organizations_organization.my_organisation.accounts
 
+  # TO_FILL
   roles = [
     "aws_admin_access",
     "aws_power_user_access",
@@ -11,5 +12,6 @@ module "default_iam" {
 }
 
 resource "aws_iam_account_alias" "alias" {
+  # TO_FILL
   account_alias = "mycompany-${replace(local.account_name, "_", "-")}"
 }
