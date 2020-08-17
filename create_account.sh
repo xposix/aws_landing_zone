@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 set -e
 
@@ -9,6 +9,11 @@ template_dir="accounts/template"
 master_dir="accounts/master"
 account_dir="accounts"
 organizations_deployer_role="OrganizationAccountAccessRole"
+
+# TO_FILL Hardcoded values that will never change for this company
+account_alias_prefix="mycompany"
+company_email_domain="mycompany.domain"
+company_route53_domain="mycompany.com."
 
 # ----------------------------------
 # Step #2: User defined function
@@ -41,7 +46,9 @@ start_wizard() {
   request_values dns_subdomain "Enter the DNS subdomain without trailing dots, e.g: 'sandbox'"
   request_values number_of_azs "How many Availability Zones to use 2 or 3?"
   request_values vpc_cidr "CIDR given to the VPC"
-  request_values environment_type "What type is this environment? 'live', 'nonlive', 'sandbox', etc"
+  request_values environment_type "What type is this environment? (e.g.: 'live', 'nonlive', 'sandbox'): "
+  request_values primary_region  "What is your primary region? (e.g.: 'eu-west-1', 'eu-west-2'): "
+  request_values secondary_region "What is your secondary region? (e.g.: 'eu-west-1', 'eu-west-2'): "
   confirm
 }
 
@@ -70,17 +77,22 @@ else
 fi
 
 echo "[INFO] Creating organisation account definition.."
-cp ${template_dir}/organisation/account_template.tf ${master_dir}/account_${account_name}.tf
-sed -i '' "s/{ACCOUNT_NAME}/${account_name}/g" ${master_dir}/account_${account_name}.tf
-sed -i '' "s/{ORGANISATIONS_DEPLOYER_ROLE}/${organizations_deployer_role}/g" ${master_dir}/account_${account_name}.tf
+destination_file="${master_dir}/account_${account_name}.tf"
+cp ${template_dir}/organisation/account_template.tf ${destination_file}
+sed -i '' "s/{ACCOUNT_NAME}/${account_name}/g"                               ${destination_file}
+sed -i '' "s/{ORGANISATIONS_DEPLOYER_ROLE}/${organizations_deployer_role}/g" ${destination_file}
+sed -i '' "s/{COMPANY_EMAIL_DOMAIN}/${company_email_domain}/g"               ${destination_file}
 
 echo "[INFO] Creating default terraform backend.."
-cp ${template_dir}/account/backend.tf ${account_dir}/${account_name}/backend.tf
-sed -i '' "s/{ACCOUNT_NAME}/${account_name}/g" ${account_dir}/${account_name}/backend.tf
-sed -i '' "s/{ACCOUNT_DIR}/${account_dir}/g" ${account_dir}/${account_name}/backend.tf
+destination_file="${account_dir}/${account_name}/backend.tf"
+cp ${template_dir}/account/backend.tf ${destination_file}
+sed -i '' "s/{ACCOUNT_NAME}/${account_name}/g"             ${destination_file}
+sed -i '' "s/{ACCOUNT_DIR}/${account_dir}/g"               ${destination_file}
+sed -i '' "s/{PRIMARY_REGION}/${primary_region}/g"         ${destination_file}
 
 echo "[INFO] Creating default terraform IAM.."
 cp ${template_dir}/account/iam.tf ${account_dir}/${account_name}/iam.tf
+sed -i '' "s/{ACCOUNT_ALIAS_PREFIX}/${account_alias_prefix}/g"        ${destination_file}
 
 echo "[INFO] Creating default terraform for AWS Config.."
 cp ${template_dir}/account/awsconfig.tf ${account_dir}/${account_name}/awsconfig.tf
@@ -98,10 +110,14 @@ echo "[INFO] Creating default terraform provider.."
 cp ${template_dir}/account/provider.tf ${account_dir}/${account_name}/provider.tf
 
 echo "[INFO] Creating default terraform variables.."
-cp ${template_dir}/account/vars.tf ${account_dir}/${account_name}/vars.tf
-sed -i '' "s/{ACCOUNT_NAME}/${account_name}/g" ${account_dir}/${account_name}/vars.tf
-sed -i '' "s/{ORGANISATIONS_DEPLOYER_ROLE}/${organizations_deployer_role}/g" ${account_dir}/${account_name}/vars.tf
-sed -i '' "s/{DNS_SUBDOMAIN}/${dns_subdomain}/g" ${account_dir}/${account_name}/vars.tf
-sed -i '' "s/{NUMBER_OF_AZS}/${number_of_azs}/g" ${account_dir}/${account_name}/vars.tf
-sed -i '' "s;{VPC_CIDR};${vpc_cidr};g" ${account_dir}/${account_name}/vars.tf
-sed -i '' "s/{ENVIRONMENT_TYPE}/${environment_type}/g" ${account_dir}/${account_name}/vars.tf
+destination_file="${account_dir}/${account_name}/vars.tf"
+cp ${template_dir}/account/vars.tf ${destination_file}
+sed -i '' "s/{ACCOUNT_NAME}/${account_name}/g"                        ${destination_file}
+sed -i '' "s/{ORGANISATIONS_DEPLOYER_ROLE}/${organizations_deployer_role}/g"      ${destination_file}
+sed -i '' "s/{COMPANY_ROUTE53_DOMAIN}/${company_route53_domain}/g"    ${destination_file}
+sed -i '' "s/{DNS_SUBDOMAIN}/${dns_subdomain}/g"                      ${destination_file}
+sed -i '' "s/{NUMBER_OF_AZS}/${number_of_azs}/g"                      ${destination_file}
+sed -i '' "s;{VPC_CIDR};${vpc_cidr};g"                                ${destination_file}
+sed -i '' "s/{ENVIRONMENT_TYPE}/${environment_type}/g"                ${destination_file}
+sed -i '' "s/{PRIMARY_REGION}/${primary_region}/g"                    ${destination_file}
+sed -i '' "s/{SECONDARY_REGION}/${secondary_region}/g"                ${destination_file}
