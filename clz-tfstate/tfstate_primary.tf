@@ -3,7 +3,6 @@ resource "aws_s3_bucket" "terraform_state_landing_zone_aws" {
   bucket        = "terraform-state-landing-zone-aws"
   acl           = "private"
   force_destroy = false
-  region        = local.primary_region
 
   tags = var.tags
 

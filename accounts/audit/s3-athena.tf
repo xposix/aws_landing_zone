@@ -6,7 +6,6 @@ resource "aws_s3_bucket" "athena_bucket" {
   bucket        = local.athena_bucket_name
   acl           = "private"
   force_destroy = true
-  region        = var.region
 
   versioning {
     enabled = false

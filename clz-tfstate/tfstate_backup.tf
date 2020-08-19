@@ -4,7 +4,6 @@ resource "aws_s3_bucket" "terraform_state_landing_zone_aws_backup" {
   bucket        = "mycompany-terraform-state-landing-zone-aws-backup"
   acl           = "private"
   force_destroy = false
-  region        = local.backup_region
 
   tags = var.tags
 

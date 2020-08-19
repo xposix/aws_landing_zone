@@ -4,7 +4,6 @@ resource "aws_s3_bucket" "terraform_state_local_projects_backup" {
   bucket        = "${local.bucket_name}-backup"
   acl           = "private"
   force_destroy = false
-  region        = var.backup_region
 
   tags = var.project_tags
 

@@ -5,7 +5,7 @@ locals {
 resource "aws_s3_bucket" "awsconfig_master_global_org" {
   bucket        = local.awsconfig_master_global_org_name
   force_destroy = true
-  region        = var.region
+
 
   versioning {
     enabled = false
