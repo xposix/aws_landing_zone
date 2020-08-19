@@ -4,6 +4,8 @@
 # .tfstate files
 *.tfstate
 *.tfstate.*
+!clz-tfstate/terraform.tfstate
+!clz-tfstate/terraform.tfstate.backup
 
 # Crash log files
 crash.log
