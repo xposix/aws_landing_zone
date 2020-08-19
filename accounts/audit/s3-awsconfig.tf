@@ -1,5 +1,5 @@
 locals {
-  awsconfig_master_global_org_name = "awsconfig-master-global-org"
+  awsconfig_master_global_org_name = "{COMPANY_PREFIX}-awsconfig-master-global-org"
 }
 
 resource "aws_s3_bucket" "awsconfig_master_global_org" {

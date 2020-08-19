@@ -1,5 +1,5 @@
 locals {
-  athena_bucket_name = "athena-default-results"
+  athena_bucket_name = "{COMPANY_PREFIX}-athena-default-results"
 }
 
 resource "aws_s3_bucket" "athena_bucket" {

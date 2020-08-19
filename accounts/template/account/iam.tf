@@ -7,5 +7,5 @@ module "default_iam" {
 }
 
 resource "aws_iam_account_alias" "alias" {
-  account_alias = "mycompany-${replace(local.account_name, "_", "-")}"
+  account_alias = "{COMPANY_PREFIX}-${replace(local.account_name, "_", "-")}"
 }

@@ -1,5 +1,5 @@
 locals {
-  cloudtrail_master_global_org_bucket = "cloudtrail-master-global-org"
+  cloudtrail_master_global_org_bucket = "{COMPANY_PREFIX}-cloudtrail-master-global-org"
 }
 
 resource "aws_cloudtrail" "cloudtrail_master_global_org" {

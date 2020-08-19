@@ -30,6 +30,6 @@ locals {
     a["id"]
     if a["name"] == var.local_account_name
   ].0
-  backup_account_id = "TO_FILL"
-  bucket_name       = "terraform-state-local-projects-${replace(var.local_account_name, "_", "-")}"
+  # TO_FILL
+  bucket_name       = "{COMPANY_PREFIX}-terraform-state-local-projects-${replace(var.local_account_name, "_", "-")}"
 }

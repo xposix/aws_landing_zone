@@ -64,7 +64,7 @@ HOOK_URL = boto3.client('kms').decrypt(CiphertextBlob=b64decode(ENCRYPTED_HOOK_U
 
 ACCOUNT_ALIAS = boto3.client('iam').list_account_aliases(MaxItems=1)["AccountAliases"][0]
 
-accountName = ACCOUNT_ALIAS.replace("mycompany-", "")
+accountName = ACCOUNT_ALIAS.replace("{COMPANY_PREFIX}", "")
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
