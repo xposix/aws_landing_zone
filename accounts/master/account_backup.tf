@@ -6,7 +6,7 @@ resource "aws_organizations_account" "backup" {
 
   parent_id = aws_organizations_organizational_unit.engineering.id
 
-  iam_user_access_to_billing = "DENY"
+  iam_user_access_to_billing = "ALLOW"
 
   tags = {
     short_name  = "Backup"
