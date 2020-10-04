@@ -38,7 +38,7 @@ resource "aws_s3_bucket_policy" "terraform_state_landing_zone_aws_backup" {
       "Sid": "AllowReplication",
       "Effect": "Allow",
       "Principal": {
-        "AWS": "arn:aws:iam::${local.primary_account}:root"
+        "AWS": "arn:aws:iam::${data.aws_caller_identity.primary_account.account_id}:root"
       },
       "Action": [
         "s3:ReplicateObject",
@@ -53,7 +53,7 @@ resource "aws_s3_bucket_policy" "terraform_state_landing_zone_aws_backup" {
       "Sid": "AllowReplication",
       "Effect": "Allow",
       "Principal": {
-        "AWS": "arn:aws:iam::${local.primary_account}:root"
+        "AWS": "arn:aws:iam::${data.aws_caller_identity.primary_account.account_id}:root"
       },
       "Action": [
         "s3:List*",
@@ -72,6 +72,7 @@ POLICY
 resource "aws_kms_key" "terraform_state_landing_zone_aws_backup" {
   provider                = aws.backup
   description             = "This key is used to encrypt landing zone terraform state bucket objects"
+  deletion_window_in_days = 30
 
   tags = local.tags
 
@@ -83,7 +84,7 @@ resource "aws_kms_key" "terraform_state_landing_zone_aws_backup" {
       "Sid": "Enable IAM User Permissions",
       "Effect": "Allow",
       "Principal": {
-        "AWS": "arn:aws:iam::${local.backup_account}:root"
+        "AWS": "arn:aws:iam::${local.backup_account_id}:root"
       },
       "Action": "kms:*",
       "Resource": "*"
@@ -92,7 +93,7 @@ resource "aws_kms_key" "terraform_state_landing_zone_aws_backup" {
       "Sid": "Enable cross account encrypt access for S3 Cross Region Replication",
       "Effect": "Allow",
       "Principal": {
-        "AWS": "arn:aws:iam::${local.primary_account}:root"
+        "AWS": "arn:aws:iam::${data.aws_caller_identity.primary_account.account_id}:root"
       },
       "Action": "kms:Encrypt",
       "Resource": "*"
