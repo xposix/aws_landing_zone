@@ -1,11 +1,11 @@
 # BACKUP AWS S3 Bucket for storing terraform state files
 resource "aws_s3_bucket" "terraform_state_landing_zone_aws_backup" {
   provider      = aws.backup
-  bucket        = "mycompany-terraform-state-landing-zone-aws-backup"
+  bucket        = "${local.tf_state_s3_bucket_name}-backup"
   acl           = "private"
   force_destroy = false
 
-  tags = var.tags
+  tags = local.tags
 
   versioning {
     enabled = true
@@ -72,7 +72,8 @@ POLICY
 resource "aws_kms_key" "terraform_state_landing_zone_aws_backup" {
   provider                = aws.backup
   description             = "This key is used to encrypt landing zone terraform state bucket objects"
-  deletion_window_in_days = 10
+
+  tags = local.tags
 
   policy = <<POLICY
 {

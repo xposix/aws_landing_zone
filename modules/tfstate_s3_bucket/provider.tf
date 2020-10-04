@@ -7,7 +7,7 @@ provider "aws" {
   region = var.backup_region
 
   assume_role {
-    role_arn = "arn:aws:iam::${local.backup_account_id}:role/OrganizationAccountAccessRole"
+    role_arn = local.backup_assume_role_arn
   }
 }
 

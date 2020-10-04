@@ -1,17 +1,12 @@
 # AWS Provider Configuration
 provider "aws" {
-  region = var.region
-}
-
-variable "region" {
-  # TO_FILL
-  default = "eu-west-1"
+  region = local.region
 }
 
 # Audit AWS Provider Configuration
 provider "aws" {
   alias  = "audit"
-  region = var.region
+  region = local.region
 
   assume_role {
     role_arn = "arn:aws:iam::${local.non_master_account_ids["audit"]}:role/OrganizationAccountAccessRole"
