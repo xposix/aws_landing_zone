@@ -11,7 +11,7 @@ resource "aws_cloudtrail" "cloudtrail_master_global_org" {
   is_multi_region_trail         = true
   enable_log_file_validation    = true
   cloud_watch_logs_role_arn     = aws_iam_role.cloudtrail_cloudwatch_logs.arn
-  cloud_watch_logs_group_arn    = aws_cloudwatch_log_group.cloudtrail_master_global_org.arn
+  cloud_watch_logs_group_arn    = "${aws_cloudwatch_log_group.cloudtrail_master_global_org.arn}:*"
 
   kms_key_id = data.aws_kms_alias.cloudtrail_master_global_org.target_key_arn
 
@@ -32,7 +32,7 @@ resource "aws_cloudtrail" "cloudtrail_master_global_org" {
     data_resource {
       type   = "AWS::Lambda::Function"
       values = ["arn:aws:lambda"]
-}
+    }
   }
 }
 

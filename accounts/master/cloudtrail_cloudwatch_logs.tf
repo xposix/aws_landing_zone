@@ -41,7 +41,7 @@ resource "aws_iam_role_policy" "cloudtrail_cloudwatch_logs" {
         "logs:PutLogEvents"
       ],
       "Resource": [
-        "${aws_cloudwatch_log_group.cloudtrail_master_global_org.arn}"
+        "${aws_cloudwatch_log_group.cloudtrail_master_global_org.arn}:*"
       ]
     }
   ]
