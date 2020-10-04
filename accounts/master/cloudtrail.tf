@@ -13,7 +13,7 @@ resource "aws_cloudtrail" "cloudtrail_master_global_org" {
   cloud_watch_logs_role_arn     = aws_iam_role.cloudtrail_cloudwatch_logs.arn
   cloud_watch_logs_group_arn    = "${aws_cloudwatch_log_group.cloudtrail_master_global_org.arn}:*"
 
-  kms_key_id = data.aws_kms_alias.cloudtrail_master_global_org.target_key_arn
+  kms_key_id = aws_kms_alias.cloudtrail_master_global_org.target_key_arn
 
   event_selector {
     read_write_type           = "All"

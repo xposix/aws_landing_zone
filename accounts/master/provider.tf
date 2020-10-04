@@ -9,6 +9,6 @@ provider "aws" {
   region = local.region
 
   assume_role {
-    role_arn = "arn:aws:iam::${local.non_master_account_ids["audit"]}:role/OrganizationAccountAccessRole"
+    role_arn = "arn:aws:iam::${aws_organizations_account.audit.id}:role/OrganizationAccountAccessRole"
   }
 }
