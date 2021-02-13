@@ -1,5 +1,5 @@
 resource "aws_iam_role" "replication" {
-  name_prefix = "tfstate_projects_aws_rep"
+  name_prefix = "${substr(var.bucket_name, 0, 20)}-replication"
   description = "Allow S3 to assume the role for replication"
 
   assume_role_policy = <<POLICY
@@ -20,7 +20,7 @@ POLICY
 }
 
 resource "aws_iam_policy" "replication" {
-  name_prefix = "tfstate_projects_aws_rep"
+  name_prefix = "${var.bucket_name}-replicationpolicy"
   description = "Allows reading for replication."
 
   policy = <<POLICY
@@ -34,7 +34,7 @@ resource "aws_iam_policy" "replication" {
       ],
       "Effect": "Allow",
       "Resource": [
-        "${aws_s3_bucket.terraform_state_local_projects.arn}"
+        "${aws_s3_bucket.replication_origin.arn}"
       ]
     },
     {
@@ -45,7 +45,7 @@ resource "aws_iam_policy" "replication" {
       ],
       "Effect": "Allow",
       "Resource": [
-        "${aws_s3_bucket.terraform_state_local_projects.arn}/*"
+        "${aws_s3_bucket.replication_origin.arn}/*"
       ]
     },
     {
@@ -55,21 +55,22 @@ resource "aws_iam_policy" "replication" {
         "s3:ReplicateDelete"
       ],
       "Effect": "Allow",
-      "Resource": "${aws_s3_bucket.terraform_state_local_projects_backup.arn}/*"
-    },
-    {
+      "Resource": "${aws_s3_bucket.replication_destination.arn}/*"
+    }
+    %{if var.enable_kms}
+    ,{
       "Action": "kms:Decrypt",
       "Effect": "Allow",
       "Condition": {
         "StringLike": {
           "kms:ViaService": "s3.${var.primary_region}.amazonaws.com",
           "kms:EncryptionContext:aws:s3:arn": [
-            "${aws_s3_bucket.terraform_state_local_projects.arn}/*"
+            "${aws_s3_bucket.replication_origin.arn}/*"
           ]
         }
       },
       "Resource": [
-        "${aws_kms_key.terraform_state_local_projects.arn}"
+        "${aws_kms_key.replication_origin[0].arn}"
       ]
     },
     {
@@ -79,21 +80,22 @@ resource "aws_iam_policy" "replication" {
         "StringLike": {
           "kms:ViaService": "s3.${var.backup_region}.amazonaws.com",
           "kms:EncryptionContext:aws:s3:arn": [
-            "${aws_s3_bucket.terraform_state_local_projects_backup.arn}/*"
+            "${aws_s3_bucket.replication_destination.arn}/*"
           ]
         }
       },
       "Resource": [
-        "${aws_kms_key.terraform_state_local_projects_backup.arn}"
+        "${aws_kms_key.replication_destination[0].arn}"
       ]
     }
+    %{endif}
   ]
 }
 POLICY
 }
 
 resource "aws_iam_policy_attachment" "replication" {
-  name       = "tfstate_projects_aws_rep"
+  name       = "${var.bucket_name}_bucket_projects_aws_rep"
   roles      = [aws_iam_role.replication.name]
   policy_arn = aws_iam_policy.replication.arn
 }
