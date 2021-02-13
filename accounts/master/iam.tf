@@ -5,10 +5,10 @@ module "default_iam" {
 
   # TO_FILL
   roles = [
-    "aws_admin_access",
-    "aws_power_user_access",
-    "aws_readonly_access",
-    "billing_admin",
+    "clz_aws_admin_access",
+    "clz_aws_power_user_access",
+    "clz_aws_readonly_access",
+    "clz_billing_admin",
   ]
 }
 
