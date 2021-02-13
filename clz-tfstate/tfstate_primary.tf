@@ -1,10 +1,10 @@
 # AWS S3 Bucket for storing terraform state files
 resource "aws_s3_bucket" "terraform_state_landing_zone_aws" {
-  bucket        = "terraform-state-landing-zone-aws"
+  bucket        = local.tf_state_s3_bucket_name
   acl           = "private"
   force_destroy = false
 
-  tags = var.tags
+  tags = local.tags
 
   replication_configuration {
     role = aws_iam_role.replication.arn
@@ -43,7 +43,8 @@ resource "aws_s3_bucket" "terraform_state_landing_zone_aws" {
 
 resource "aws_kms_key" "terraform_state_landing_zone_aws" {
   description             = "This key is used to encrypt clear landing zone terraform state bucket objects"
-  deletion_window_in_days = 10
+  deletion_window_in_days = 30
+  tags = local.tags
 }
 
 resource "aws_kms_alias" "terraform_state_landing_zone_aws" {

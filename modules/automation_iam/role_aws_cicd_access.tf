@@ -1,53 +1,45 @@
 ## Create the role and assign assume policy
-resource "aws_iam_role" "clz_aws_power_user_access" {
-  count                = contains(var.roles, "clz_aws_power_user_access") ? 1 : 0
-  name                 = "clz_aws_power_user_access"
-  assume_role_policy   = data.aws_iam_policy_document.saml_federated_and_api_access_assume.json
+resource "aws_iam_role" "clz_aws_cicd_access" {
+  name                 = "clz_aws_cicd_access"
+  assume_role_policy   = data.aws_iam_policy_document.cc_api_access.json
   max_session_duration = var.max_session_duration
 }
 
-resource "aws_iam_role_policy_attachment" "clz_aws_power_user_access" {
-  count      = contains(var.roles, "clz_aws_power_user_access") ? 1 : 0
-  role       = aws_iam_role.clz_aws_power_user_access[count.index].name
-  policy_arn = "arn:aws:iam::aws:policy/PowerUserAccess"
+data "aws_iam_policy_document" "cc_api_access" {
+  statement {
+    effect = "Allow"
+
+    principals {
+      type        = "AWS"
+      identifiers = var.lock_cicd_role_to_these_arns
+    }
+
+    actions = ["sts:AssumeRole"]
+  }
+
 }
 
-resource "aws_iam_role_policy_attachment" "restrictions_power_user" {
-  count      = contains(var.roles, "clz_aws_power_user_access") ? 1 : 0
-  role       = aws_iam_role.clz_aws_power_user_access[count.index].name
-  policy_arn = aws_iam_policy.restrictions_power_user[count.index].arn
+## Adds Administrator Access
+resource "aws_iam_role_policy_attachment" "clz_aws_cicd_access" {
+  role       = aws_iam_role.clz_aws_cicd_access.name
+  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
 }
 
-resource "aws_iam_policy" "restrictions_power_user" {
-  count       = contains(var.roles, "clz_aws_power_user_access") ? 1 : 0
-  name        = "clz_restrictions_power_user_policy"
+# Removes the CLZ resources from it
+resource "aws_iam_role_policy_attachment" "restrictions_aws_cicd" {
+  role       = aws_iam_role.clz_aws_cicd_access.name
+  policy_arn = aws_iam_policy.restrictions_aws_cicd.arn
+}
+
+resource "aws_iam_policy" "restrictions_aws_cicd" {
+  name        = "clz_restrictions_aws_cicd_policy"
   path        = "/"
-  description = "Restricts AWS Config total access and only allows readonly Cloudtrail"
+  description = "Protects the CLZ resources from misusage"
 
   policy = <<EOF
 {
   "Version": "2012-10-17",
   "Statement": [
-    {
-      "Sid": "Stmt1585652472561",
-      "Action": "config:*",
-      "Effect": "Deny",
-      "Resource": "*"
-    },
-    {
-      "Sid": "Stmt1585652556928",
-      "Action": [
-        "cloudtrail:AddTags",
-        "cloudtrail:CreateTrail",
-        "cloudtrail:DeleteTrail",
-        "cloudtrail:RemoveTags",
-        "cloudtrail:StartLogging",
-        "cloudtrail:StopLogging",
-        "cloudtrail:UpdateTrail"
-      ],
-      "Effect": "Deny",
-      "Resource": "arn:aws:cloudtrail:*:${data.aws_caller_identity.current.account_id}:trail/clz_*"
-    },
     {
       "Sid": "Stmt1585655254541",
       "Action": [

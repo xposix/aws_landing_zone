@@ -30,6 +30,14 @@ locals {
     a["id"]
     if a["name"] == var.local_account_name
   ].0
+
+  backup_account_id = [
+    for a in data.aws_organizations_organization.my_organisation.accounts :
+    a["id"]
+    if a["name"] == "backup"
+  ].0
+  backup_assume_role_arn = "arn:aws:iam::${local.backup_account_id}:role/OrganizationAccountAccessRole"
+  
   # TO_FILL
   bucket_name       = "{COMPANY_PREFIX}-terraform-state-local-projects-${replace(var.local_account_name, "_", "-")}"
 }

@@ -24,9 +24,9 @@ variable "saml_metadata_document_path" {
   default     = ""
 }
 
-variable "google_oauth_client_id" {
-  description = "The google client id passed from the aws-credentials-broker"
-}
+# variable "google_oauth_client_id" {
+#   description = "The google client id passed from the aws-credentials-broker"
+# }
 
 variable "master_account_id" {
   description = "The account number of master/organisations root"

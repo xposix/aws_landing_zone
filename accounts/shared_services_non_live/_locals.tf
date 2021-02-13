@@ -2,6 +2,8 @@
 locals {
   account_name  = "shared_services_non_live"
   dns_subdomain = "nonlive.services"
+  region        = "eu-west-1"
+  backup_region = "eu-west-2"
 
   project_tags = {
     project_name = local.account_name
@@ -31,10 +33,6 @@ locals {
     n_of_AZs = 2
     vpc_cidr = "10.1.4.0/22"
   }
-}
-
-variable "region" {
-  default = "eu-west-1"
 }
 
 data "aws_organizations_organization" "my_organisation" { provider = aws.master }

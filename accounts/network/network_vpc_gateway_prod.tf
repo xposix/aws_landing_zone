@@ -12,9 +12,9 @@ module "gateway_prod" {
   enable_ipv6          = false
 
   azs = [
-    "${var.region}a",
-    "${var.region}b",
-    "${var.region}c"
+    "${local.region}a",
+    "${local.region}b",
+    "${local.region}c"
   ]
 
   private_subnets = [

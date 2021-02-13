@@ -3,11 +3,11 @@ module "default_iam" {
 
   aws_organizations_accounts = data.aws_organizations_organization.my_organisation.accounts
 
-# TO_FILL
+  # TO_FILL
   roles = [
-    "aws_admin_access",
-    "aws_power_user_access",
-    "aws_readonly_access"
+    "clz_aws_admin_access",
+    "clz_aws_power_user_access",
+    "clz_aws_readonly_access"
   ]
 }
 
