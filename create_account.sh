@@ -47,8 +47,6 @@ start_wizard() {
   request_values number_of_azs "How many Availability Zones to use 2 or 3?"
   request_values vpc_cidr "CIDR given to the VPC"
   request_values environment_type "What type is this environment? (e.g.: 'live', 'nonlive', 'sandbox'): "
-  request_values primary_region  "What is your primary region? (e.g.: 'eu-west-1', 'eu-west-2'): "
-  request_values secondary_region "What is your secondary region? (e.g.: 'eu-west-1', 'eu-west-2'): "
   confirm
 }
 
@@ -66,7 +64,7 @@ start_wizard
 if [[ ${account_name} =~ ^[a-z0-9_]+$ ]]; then
   echo "[INFO] Account name is ${account_name}"
 else
-  echo "[FATAL] Invalid account name. Account names accept lowercase alphanumeric with hyphen separators" && exit 1
+  echo "[FATAL] Invalid account name. Account names accept lowercase alphanumeric with lowercase separators" && exit 1
 fi
 
 echo "[INFO] Creating account directory.."
@@ -75,6 +73,8 @@ if [ -d "${account_dir}/${account_name}" ]; then
 else
   mkdir ${account_dir}/${account_name}
 fi
+
+primary_region=$(cat ./general.tfvars | grep primary_region | awk '{print $3}' | sed 's/"//g')
 
 echo "[INFO] Creating organisation account definition.."
 destination_file="${master_dir}/account_${account_name}.tf"
@@ -94,6 +94,9 @@ echo "[INFO] Creating default terraform IAM.."
 cp ${template_dir}/account/iam.tf ${account_dir}/${account_name}/iam.tf
 sed -i '' "s/{ACCOUNT_ALIAS_PREFIX}/${account_alias_prefix}/g"        ${destination_file}
 
+echo "[INFO] Creating locals file.."
+cp ${template_dir}/account/_locals.tf ${account_dir}/${account_name}/_locals.tf
+
 echo "[INFO] Creating default terraform for AWS Config.."
 cp ${template_dir}/account/awsconfig.tf ${account_dir}/${account_name}/awsconfig.tf
 
@@ -110,8 +113,11 @@ echo "[INFO] Creating default terraform provider.."
 cp ${template_dir}/account/provider.tf ${account_dir}/${account_name}/provider.tf
 
 echo "[INFO] Creating default terraform variables.."
-destination_file="${account_dir}/${account_name}/vars.tf"
-cp ${template_dir}/account/vars.tf ${destination_file}
+destination_file="${account_dir}/${account_name}/variables.tf"
+cp ${template_dir}/account/variables.tf ${destination_file}
+
+destination_file="${account_dir}/${account_name}/_locals.tf"
+cp ${template_dir}/account/_locals.tf ${destination_file}
 sed -i '' "s/{ACCOUNT_NAME}/${account_name}/g"                        ${destination_file}
 sed -i '' "s/{ORGANISATIONS_DEPLOYER_ROLE}/${organizations_deployer_role}/g"      ${destination_file}
 sed -i '' "s/{COMPANY_ROUTE53_DOMAIN}/${company_route53_domain}/g"    ${destination_file}
@@ -120,4 +126,6 @@ sed -i '' "s/{NUMBER_OF_AZS}/${number_of_azs}/g"                      ${destinat
 sed -i '' "s;{VPC_CIDR};${vpc_cidr};g"                                ${destination_file}
 sed -i '' "s/{ENVIRONMENT_TYPE}/${environment_type}/g"                ${destination_file}
 sed -i '' "s/{PRIMARY_REGION}/${primary_region}/g"                    ${destination_file}
-sed -i '' "s/{SECONDARY_REGION}/${secondary_region}/g"                ${destination_file}
+
+echo "[INFO] Copying the rest of the files.."
+cp ${template_dir}/account/Makefile ${account_dir}/${account_name}/Makefile
