@@ -68,7 +68,7 @@ resource "aws_s3_bucket_policy" "cloudtrail_master_global_org" {
   provider = aws.audit
   bucket   = aws_s3_bucket.cloudtrail_master_global_org.id
 
-  policy   = <<POLICY
+  policy = <<POLICY
 {
     "Version": "2012-10-17",
     "Statement": [
@@ -136,7 +136,7 @@ resource "aws_kms_key" "cloudtrail_master_global_org" {
     {
       "Sid": "Allow cloudwatch logs to use key",
       "Effect": "Allow",
-      "Principal": { "Service": "logs.${local.region}.amazonaws.com" },
+      "Principal": { "Service": "logs.${var.primary_region}.amazonaws.com" },
       "Action": [
         "kms:Encrypt*",
         "kms:Decrypt*",
@@ -187,7 +187,7 @@ resource "aws_kms_key" "cloudtrail_master_global_org" {
     "Resource": "*",
       "Condition": {
         "StringEquals": {
-          "kms:ViaService": "ec2.${local.region}.amazonaws.com",
+          "kms:ViaService": "ec2.${var.primary_region}.amazonaws.com",
           "kms:CallerAccount": "${aws_organizations_organization.my_organisation.master_account_id}"
         }
       }

@@ -33,12 +33,4 @@ locals {
   }
 }
 
-variable "region" {
-  default = "{PRIMARY_REGION}"
-}
-
-variable "secondary_region" {
-  default = "{SECONDARY_REGION}"
-}
-
 data "aws_organizations_organization" "my_organisation" { provider = aws.master }

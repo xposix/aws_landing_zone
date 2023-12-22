@@ -3,8 +3,6 @@ locals {
   # Account settings
   account_name  = "shared_services_live"
   dns_subdomain = "live.services"
-  region        = "eu-west-1"
-  backup_region = "eu-west-2"
 
   # IAM settings
   iam_roles_to_deploy = [

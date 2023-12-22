@@ -1,6 +1,6 @@
 # AWS Provider Configuration
 provider "aws" {
-  region = local.region
+  region = var.primary_region
 
   assume_role {
     role_arn = local.assume_role_arn
@@ -10,5 +10,5 @@ provider "aws" {
 # AWS Master Provider Configuration
 provider "aws" {
   alias  = "master"
-  region = local.region
+  region = var.primary_region
 }

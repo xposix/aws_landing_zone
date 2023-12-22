@@ -5,8 +5,8 @@ module "projects-backups-replication-buckets" {
     aws.backup = aws.backup
   }
   bucket_name    = "{COMPANY_PREFIX}-local-projects-${replace(local.account_name, "_", "-")}"
-  primary_region = local.region
-  backup_region  = local.backup_region
+  primary_region = var.primary_region
+  backup_region  = var.secondary_region
   project_tags   = local.project_tags
   enable_kms     = false
 }
@@ -20,8 +20,8 @@ module "terraform-project-state-buckets-v2" {
     aws.backup = aws.backup
   }
 
-  primary_region     = local.region
-  backup_region      = local.backup_region
+  primary_region     = var.primary_region
+  backup_region      = var.secondary_region
   project_tags       = local.project_tags
   local_account_name = local.account_name
   bucket_purpose     = "local-projects"
