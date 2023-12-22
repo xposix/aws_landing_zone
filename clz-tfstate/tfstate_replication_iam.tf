@@ -36,56 +36,6 @@ resource "aws_iam_policy" "replication" {
       "Resource": [
         "${aws_s3_bucket.terraform_state_landing_zone_aws.arn}"
       ]
-    },
-    {
-      "Action": [
-        "s3:GetObjectVersion",
-        "s3:GetObjectVersionForReplication",
-        "s3:GetObjectVersionAcl"
-      ],
-      "Effect": "Allow",
-      "Resource": [
-        "${aws_s3_bucket.terraform_state_landing_zone_aws.arn}/*"
-      ]
-    },
-    {
-      "Action": [
-        "s3:ObjectOwnerOverrideToBucketOwner",
-        "s3:ReplicateObject",
-        "s3:ReplicateDelete"
-      ],
-      "Effect": "Allow",
-      "Resource": "${aws_s3_bucket.terraform_state_landing_zone_aws_backup.arn}/*"
-    },
-    {
-      "Action": "kms:Decrypt",
-      "Effect": "Allow",
-      "Condition": {
-        "StringLike": {
-          "kms:ViaService": "s3.${local.primary_region}.amazonaws.com",
-          "kms:EncryptionContext:aws:s3:arn": [
-            "${aws_s3_bucket.terraform_state_landing_zone_aws.arn}/*"
-          ]
-        }
-      },
-      "Resource": [
-        "${aws_kms_key.terraform_state_landing_zone_aws.arn}"
-      ]
-    },
-    {
-      "Action": "kms:Encrypt",
-      "Effect": "Allow",
-      "Condition": {
-        "StringLike": {
-          "kms:ViaService": "s3.${local.backup_region}.amazonaws.com",
-          "kms:EncryptionContext:aws:s3:arn": [
-            "${aws_s3_bucket.terraform_state_landing_zone_aws_backup.arn}/*"
-          ]
-        }
-      },
-      "Resource": [
-        "${aws_kms_key.terraform_state_landing_zone_aws_backup.arn}"
-      ]
     }
   ]
 }
