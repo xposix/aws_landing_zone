@@ -3,6 +3,12 @@ variable "bucket_name" {
   type        = string
 }
 
+variable "enable_replication" {
+  description = "Enable replication right now, this is useful to deploy the S3 bucket now and enable replication later"
+  type        = bool
+  default     = true
+}
+
 variable "enable_kms" {
   description = "Use dedicated KMS for encrypting those buckets or just AES256 encryption"
   type        = bool
@@ -20,7 +26,7 @@ variable "backup_region" {
 }
 
 variable "project_tags" {
-  type        = map
+  type        = map(any)
   description = "A key/value map containing tags to add to all resources"
   # EXAMPLE
   # default = {
@@ -36,9 +42,9 @@ data "aws_caller_identity" "current" {}
 locals {
   primary_account_id = data.aws_caller_identity.current.account_id
 
-  backup_account_id = [
+  backup_account_id = var.enable_replication ? [
     for a in data.aws_organizations_organization.my_organisation.accounts :
     a["id"]
     if a["name"] == "backup"
-  ].0
+  ].0 : ""
 }

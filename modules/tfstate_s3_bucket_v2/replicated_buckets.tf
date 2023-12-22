@@ -6,6 +6,8 @@ module "replicated_buckets" {
     aws.backup = aws.backup
   }
 
+  enable_replication = var.enable_replication
+
   bucket_name    = local.bucket_name
   primary_region = var.primary_region
   backup_region  = var.backup_region

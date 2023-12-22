@@ -1,9 +1,12 @@
-# AWS backup Provider Configuration
-provider "aws" {
-  alias  = "backup"
-}
-
-# AWS Master Provider Configuration
-provider "aws" {
-  alias  = "master"
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+      configuration_aliases = [
+        aws.backup,
+        aws.master
+      ]
+    }
+  }
 }
