@@ -1,19 +1,19 @@
 locals {
-  cloudtrail_master_global_org_bucket = "{COMPANY_PREFIX}-cloudtrail-master-global-org"
+  cloudtrail_management_global_org_bucket = "{COMPANY_PREFIX}-cloudtrail-management-global-org"
 }
 
-resource "aws_cloudtrail" "cloudtrail_master_global_org" {
-  name                          = "cloudtrail_master_global_org"
-  s3_bucket_name                = local.cloudtrail_master_global_org_bucket
+resource "aws_cloudtrail" "cloudtrail_management_global_org" {
+  name                          = "cloudtrail_management_global_org"
+  s3_bucket_name                = local.cloudtrail_management_global_org_bucket
   s3_key_prefix                 = "v1"
   include_global_service_events = true
   is_organization_trail         = true
   is_multi_region_trail         = true
   enable_log_file_validation    = true
   cloud_watch_logs_role_arn     = aws_iam_role.cloudtrail_cloudwatch_logs.arn
-  cloud_watch_logs_group_arn    = "${aws_cloudwatch_log_group.cloudtrail_master_global_org.arn}:*"
+  cloud_watch_logs_group_arn    = "${aws_cloudwatch_log_group.cloudtrail_management_global_org.arn}:*"
 
-  kms_key_id = aws_kms_alias.cloudtrail_master_global_org.target_key_arn
+  kms_key_id = aws_kms_alias.cloudtrail_management_global_org.target_key_arn
 
   event_selector {
     read_write_type           = "All"
@@ -36,9 +36,9 @@ resource "aws_cloudtrail" "cloudtrail_master_global_org" {
   }
 }
 
-resource "aws_s3_bucket" "cloudtrail_master_global_org" {
+resource "aws_s3_bucket" "cloudtrail_management_global_org" {
   provider      = aws.audit
-  bucket        = local.cloudtrail_master_global_org_bucket
+  bucket        = local.cloudtrail_management_global_org_bucket
   force_destroy = true
 
   lifecycle_rule {
@@ -56,7 +56,7 @@ resource "aws_s3_bucket" "cloudtrail_master_global_org" {
   server_side_encryption_configuration {
     rule {
       apply_server_side_encryption_by_default {
-        kms_master_key_id = aws_kms_key.cloudtrail_master_global_org.arn
+        kms_master_key_id = aws_kms_key.cloudtrail_management_global_org.arn
         sse_algorithm     = "aws:kms"
       }
     }
@@ -64,9 +64,9 @@ resource "aws_s3_bucket" "cloudtrail_master_global_org" {
 
 }
 
-resource "aws_s3_bucket_policy" "cloudtrail_master_global_org" {
+resource "aws_s3_bucket_policy" "cloudtrail_management_global_org" {
   provider = aws.audit
-  bucket   = aws_s3_bucket.cloudtrail_master_global_org.id
+  bucket   = aws_s3_bucket.cloudtrail_management_global_org.id
 
   policy = <<POLICY
 {
@@ -79,7 +79,7 @@ resource "aws_s3_bucket_policy" "cloudtrail_master_global_org" {
               "Service": "cloudtrail.amazonaws.com"
             },
             "Action": "s3:GetBucketAcl",
-            "Resource": "${aws_s3_bucket.cloudtrail_master_global_org.arn}"
+            "Resource": "${aws_s3_bucket.cloudtrail_management_global_org.arn}"
         },
         {
             "Sid": "AWSCloudTrailWrite",
@@ -89,8 +89,8 @@ resource "aws_s3_bucket_policy" "cloudtrail_master_global_org" {
             },
             "Action": "s3:PutObject",
             "Resource": [
-              "${aws_s3_bucket.cloudtrail_master_global_org.arn}/v1/AWSLogs/${aws_organizations_organization.my_organisation.master_account_id}/*",
-              "${aws_s3_bucket.cloudtrail_master_global_org.arn}/v1/AWSLogs/${aws_organizations_organization.my_organisation.id}/*"
+              "${aws_s3_bucket.cloudtrail_management_global_org.arn}/v1/AWSLogs/${aws_organizations_organization.my_organisation.management_account_id}/*",
+              "${aws_s3_bucket.cloudtrail_management_global_org.arn}/v1/AWSLogs/${aws_organizations_organization.my_organisation.id}/*"
             ],
             "Condition": {
                 "StringEquals": {
@@ -103,7 +103,7 @@ resource "aws_s3_bucket_policy" "cloudtrail_master_global_org" {
 POLICY
 }
 
-resource "aws_kms_key" "cloudtrail_master_global_org" {
+resource "aws_kms_key" "cloudtrail_management_global_org" {
   provider                = aws.audit
   description             = "This key is used to encrypt cloudtrail bucket objects"
   deletion_window_in_days = 30
@@ -129,7 +129,7 @@ resource "aws_kms_key" "cloudtrail_master_global_org" {
       "Resource": "*",
       "Condition": {
         "StringLike": {
-          "kms:EncryptionContext:aws:cloudtrail:arn": "arn:aws:cloudtrail:*:${aws_organizations_organization.my_organisation.master_account_id}:trail/*"
+          "kms:EncryptionContext:aws:cloudtrail:arn": "arn:aws:cloudtrail:*:${aws_organizations_organization.my_organisation.management_account_id}:trail/*"
         }
       }
     },
@@ -170,10 +170,10 @@ resource "aws_kms_key" "cloudtrail_master_global_org" {
       "Resource": "*",
       "Condition": {
         "StringEquals": {
-          "kms:CallerAccount": "${aws_organizations_organization.my_organisation.master_account_id}"
+          "kms:CallerAccount": "${aws_organizations_organization.my_organisation.management_account_id}"
         },
         "StringLike": {
-          "kms:EncryptionContext:aws:cloudtrail:arn": "arn:aws:cloudtrail:*:${aws_organizations_organization.my_organisation.master_account_id}:trail/*"
+          "kms:EncryptionContext:aws:cloudtrail:arn": "arn:aws:cloudtrail:*:${aws_organizations_organization.my_organisation.management_account_id}:trail/*"
         }
       }
     },
@@ -188,7 +188,7 @@ resource "aws_kms_key" "cloudtrail_master_global_org" {
       "Condition": {
         "StringEquals": {
           "kms:ViaService": "ec2.${var.primary_region}.amazonaws.com",
-          "kms:CallerAccount": "${aws_organizations_organization.my_organisation.master_account_id}"
+          "kms:CallerAccount": "${aws_organizations_organization.my_organisation.management_account_id}"
         }
       }
     },
@@ -202,8 +202,8 @@ resource "aws_kms_key" "cloudtrail_master_global_org" {
     ],
     "Resource": "*",
       "Condition": {
-        "StringEquals": {"kms:CallerAccount": "${aws_organizations_organization.my_organisation.master_account_id}"},
-        "StringLike": {"kms:EncryptionContext:aws:cloudtrail:arn": "arn:aws:cloudtrail:*:${aws_organizations_organization.my_organisation.master_account_id}:trail/*"}
+        "StringEquals": {"kms:CallerAccount": "${aws_organizations_organization.my_organisation.management_account_id}"},
+        "StringLike": {"kms:EncryptionContext:aws:cloudtrail:arn": "arn:aws:cloudtrail:*:${aws_organizations_organization.my_organisation.management_account_id}:trail/*"}
       }
     }
   ]
@@ -211,8 +211,8 @@ resource "aws_kms_key" "cloudtrail_master_global_org" {
 POLICY
 }
 
-resource "aws_kms_alias" "cloudtrail_master_global_org" {
+resource "aws_kms_alias" "cloudtrail_management_global_org" {
   provider      = aws.audit
-  name          = "alias/cloudtrail_master_global_org"
-  target_key_id = aws_kms_key.cloudtrail_master_global_org.key_id
+  name          = "alias/cloudtrail_management_global_org"
+  target_key_id = aws_kms_key.cloudtrail_management_global_org.key_id
 }

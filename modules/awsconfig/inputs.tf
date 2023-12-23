@@ -3,7 +3,7 @@ variable "name" {
 }
 
 variable "bucket_name" {
-  default = "awsconfig-master-global-org"
+  type = string
 }
 
 variable "bucket_prefix" {

@@ -36,7 +36,7 @@ variable "tags" {
   # }
 }
 
-data "aws_organizations_organization" "my_organisation" { provider = aws.master }
+data "aws_organizations_organization" "my_organisation" { provider = aws.management }
 data "aws_caller_identity" "current" {}
 
 locals {

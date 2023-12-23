@@ -10,4 +10,4 @@ locals {
   assume_role_arn = "arn:aws:iam::${local.account_id}:role/OrganizationAccountAccessRole"
 }
 
-data "aws_organizations_organization" "my_organisation" { provider = aws.master }
+data "aws_organizations_organization" "my_organisation" { provider = aws.management }

@@ -1,6 +1,6 @@
 data "aws_region" "current" {}
 
-data "aws_organizations_organization" "my_organisation" { provider = aws.master }
+data "aws_organizations_organization" "my_organisation" { provider = aws.management }
 
 variable "main_r53_zone_name" {
   description = "Main zone name in the Network account"

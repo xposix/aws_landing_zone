@@ -9,10 +9,10 @@ resource "aws_organizations_organization" "my_organisation" {
   feature_set = "ALL"
 }
 
-output "non_master_accounts" {
-  value = aws_organizations_organization.my_organisation.non_master_accounts
+output "non_management_accounts" {
+  value = aws_organizations_organization.my_organisation.non_management_accounts
 }
 
-output "master_account_id" {
-  value = aws_organizations_organization.my_organisation.master_account_id
+output "management_account_id" {
+  value = aws_organizations_organization.my_organisation.management_account_id
 }

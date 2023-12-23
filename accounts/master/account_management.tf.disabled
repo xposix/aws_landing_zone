@@ -1,0 +1,17 @@
+resource "aws_organizations_account" "management" {
+  # Management account
+  name      = "management"
+  email     = "{EMAIL_PREFIX}+management@{COMPANY_EMAIL_DOMAIN}"
+
+  # iam_user_access_to_billing = "ALLOW"
+
+  tags = {
+    short_name     = "management"
+    description    = "{COMPANY_FULLNAME} Management account"
+  }
+
+  # There is no AWS Organizations API for reading role_name
+  lifecycle {
+    ignore_changes = [role_name]
+  }
+}

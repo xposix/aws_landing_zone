@@ -14,4 +14,4 @@ data "aws_ec2_transit_gateway" "prod" {
 
 data "aws_region" "current" {}
 
-data "aws_organizations_organization" "my_organisation" { provider = aws.master }
+data "aws_organizations_organization" "my_organisation" { provider = aws.management }

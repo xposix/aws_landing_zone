@@ -17,9 +17,9 @@ locals {
   network_assume_role_arn = "arn:aws:iam::${local.network_account_id}:role/OrganizationAccountAccessRole"
 }
 
-# AWS Master Provider Configuration
+# AWS Management Account Provider Configuration
 provider "aws" {
-  alias  = "master"
+  alias  = "management"
   region = data.aws_region.current.name
 }
 

@@ -6,7 +6,7 @@ set -e
 # Step #1: Define variables
 # ----------------------------------
 template_dir="accounts/template"
-master_dir="accounts/master"
+management_dir="accounts/management"
 account_dir="accounts"
 organizations_deployer_role="OrganizationAccountAccessRole"
 
@@ -77,7 +77,7 @@ fi
 primary_region=$(cat ./general.tfvars | grep primary_region | awk '{print $3}' | sed 's/"//g')
 
 echo "[INFO] Creating organisation account definition.."
-destination_file="${master_dir}/account_${account_name}.tf"
+destination_file="${management_dir}/account_${account_name}.tf"
 cp ${template_dir}/organisation/account_template.tf ${destination_file}
 sed -i '' "s/{ACCOUNT_NAME}/${account_name}/g"                               ${destination_file}
 sed -i '' "s/{ORGANISATIONS_DEPLOYER_ROLE}/${organizations_deployer_role}/g" ${destination_file}

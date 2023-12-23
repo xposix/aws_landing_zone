@@ -17,8 +17,8 @@ provider "aws" {
   }
 }
 
-# AWS Master Provider Configuration
+# AWS Management Account Provider Configuration
 provider "aws" {
-  alias  = "master"
+  alias  = "management"
   region = var.primary_region
 }

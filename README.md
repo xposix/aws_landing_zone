@@ -2,7 +2,7 @@ Cloud Landing Zone for AWS (Terraform)
 ===================================
 
 After doing this over and over across different companies, I decided to write my own code for deploying a basic landing zone while I was between jobs.
-This template will work over an existing Amazon Organisations ID and its master account to deploy the following:
+This template will work over an existing Amazon Organisations ID and its management account to deploy the following:
 
  - Transit Gateway
  - Terraform state buckets being replicated to the Backup Account.
@@ -52,7 +52,7 @@ This table is very useful to keep track of the existing AWS accounts.
 
 | Name                     | IAM Alias                           | Number       | Email                                         | Purpose                                                                                                  | DNS Prefix        | Notes |
 | :----------------------- | :---------------------------------- | :----------- | :-------------------------------------------- | :------------------------------------------------------------------------------------------------------- | :---------------- | :---- |
-| master                   | my-company-master                   | 012345678900 | aws+master@mycompany.domain                   | Master organisation billing account                                                                      |                   |       |
+| management               | my-company-management               | 012345678900 | aws+management@mycompany.domain               | Management Account organisation billing account                                                          |                   |       |
 | backup                   | my-company-backup                   | 012345678900 | aws+backup@mycompany.domain                   | Storage backup account contains all replicated buckets incase of disaster or compromise of main accounts |                   |       |
 | network                  | my-company-network                  | 012345678900 | aws+network@mycompany.domain                  | Contains all shared networking components, Transit Gateway, main Route53 domain, etc...                  |                   |       |
 | audit                    | my-company-audit                    | 012345678900 | aws+audit@mycompany.domain                    | Centralised Cloudtrail and Cloudwatch logs                                                               |                   |       |

@@ -5,7 +5,7 @@ terraform {
       version = "~> 5.0"
       configuration_aliases = [
         aws.backup,
-        aws.master
+        aws.management
       ]
     }
   }

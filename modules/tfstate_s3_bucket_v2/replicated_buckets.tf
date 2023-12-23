@@ -2,8 +2,8 @@ module "replicated_buckets" {
   source = "../replicated_s3_bucket"
 
   providers = {
-    aws.master = aws.master
-    aws.backup = aws.backup
+    aws.management = aws.management
+    aws.backup     = aws.backup
   }
 
   enable_replication = var.enable_replication

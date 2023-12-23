@@ -4,7 +4,7 @@ data "terraform_remote_state" "shared_services" {
   backend = "s3"
   config = {
     region = "eu-west-1"
-    bucket = "{COMPANY_PREFIX}-tfstate-clz-accounts-master"
+    bucket = "{COMPANY_PREFIX}-tfstate-clz-accounts-management"
     key    = "github.com/xposix/aws_landing_zone/accounts/shared_services_live/terraform.tfstate"
   }
 }

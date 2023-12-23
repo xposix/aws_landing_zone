@@ -1,5 +1,5 @@
 locals {
-  master_account_id = var.master_account_id == "" ? data.aws_organizations_organization.org.master_account_id : var.master_account_id
+  management_account_id = var.management_account_id == "" ? data.aws_organizations_organization.org.management_account_id : var.management_account_id
 }
 
 data "aws_organizations_organization" "org" {}
