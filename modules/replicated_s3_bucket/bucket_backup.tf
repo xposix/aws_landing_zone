@@ -5,7 +5,7 @@ resource "aws_s3_bucket" "replication_destination" {
   bucket        = "${var.bucket_name}-backup"
   force_destroy = false
 
-  tags = var.project_tags
+  tags = var.tags
 
   lifecycle {
     prevent_destroy = false

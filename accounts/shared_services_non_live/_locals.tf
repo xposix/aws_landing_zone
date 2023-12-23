@@ -3,12 +3,6 @@ locals {
   account_name  = "shared_services_non_live"
   dns_subdomain = "nonlive.services"
 
-  project_tags = {
-    project_name = local.account_name
-    repo         = "github.com/xposix/aws_landing_zone"
-    Terraform    = "true"
-    environment  = "nonlive"
-  }
 
   account_id = [
     for a in data.aws_organizations_organization.my_organisation.accounts :

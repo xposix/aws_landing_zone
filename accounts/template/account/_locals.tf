@@ -3,13 +3,6 @@ locals {
   company_dns_domain = "{COMPANY_ROUTE53_DOMAIN}"
   dns_subdomain      = "{DNS_SUBDOMAIN}"
 
-  project_tags = {
-    project_name = local.account_name
-    repo         = "github.com/xposix/aws_landing_zone"
-    Terraform    = "true"
-    environment  = "{ENVIRONMENT_TYPE}"
-  }
-
   iam_roles_to_deploy = [
     # "clz_aws_admin_access",
     # "clz_aws_power_user_access",

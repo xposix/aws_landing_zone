@@ -12,6 +12,6 @@ resource "aws_dynamodb_table" "terraform_locks_landing_zone_aws" {
   tags = merge({
     "Name" : "terraform_locks_landing_zone_aws"
     },
-  local.tags)
+  var.tags)
 
 }

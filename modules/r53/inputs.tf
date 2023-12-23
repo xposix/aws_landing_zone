@@ -12,8 +12,8 @@ variable "dns_subdomain" {
   type        = string
 }
 
-variable "project_tags" {
-  type        = map
+variable "tags" {
+  type        = map(any)
   description = "A key/value map containing tags to be added to all resources"
 }
 

@@ -19,7 +19,7 @@ variable "bucket_purpose" {
   default     = "local-projects"
 }
 
-variable "project_tags" {
+variable "tags" {
   type        = any
   description = "A key/value map containing tags to add to all resources"
   # EXAMPLE

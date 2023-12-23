@@ -5,7 +5,7 @@ data "aws_route53_zone" "selected" {
 
 resource "aws_route53_zone" "delegated_zones" {
   name = "${var.dns_subdomain}.${var.main_r53_zone_name}"
-  tags = var.project_tags
+  tags = var.tags
 }
 
 resource "aws_route53_record" "delegation-ns" {

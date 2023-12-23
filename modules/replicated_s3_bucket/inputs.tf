@@ -25,7 +25,7 @@ variable "backup_region" {
   type        = string
 }
 
-variable "project_tags" {
+variable "tags" {
   type        = map(any)
   description = "A key/value map containing tags to add to all resources"
   # EXAMPLE

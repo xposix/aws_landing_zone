@@ -5,7 +5,7 @@ resource "aws_s3_bucket" "terraform_state_landing_zone_aws_backup" {
   acl           = "private"
   force_destroy = false
 
-  tags = local.tags
+  tags = var.tags
 
   versioning {
     enabled = true
@@ -74,7 +74,7 @@ resource "aws_kms_key" "terraform_state_landing_zone_aws_backup" {
   description             = "This key is used to encrypt landing zone terraform state bucket objects"
   deletion_window_in_days = 30
 
-  tags = local.tags
+  tags = var.tags
 
   policy = <<POLICY
 {

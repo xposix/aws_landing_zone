@@ -3,7 +3,7 @@ resource "aws_s3_bucket" "replication_origin" {
   bucket        = var.bucket_name
   force_destroy = false
 
-  tags = var.project_tags
+  tags = var.tags
 }
 
 resource "aws_s3_bucket_ownership_controls" "replication_origin" {

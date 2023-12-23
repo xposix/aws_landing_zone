@@ -11,7 +11,7 @@ module "replicated_buckets" {
   bucket_name    = local.bucket_name
   primary_region = var.primary_region
   backup_region  = var.backup_region
-  project_tags   = var.project_tags
+  tags           = var.tags
   enable_kms     = var.enable_kms
 
 }

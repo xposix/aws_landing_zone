@@ -29,10 +29,8 @@ module "gateway_prod" {
     cidrsubnet(local.gateway_prod_cidr, 3, 5),
   ]
 
-  tags = {
-    Terraform = "true"
-    env       = "production"
-  }
+  tags = var.tags
+
 }
 
 resource "aws_route" "gateway_prod_public_subnets_to_aws" {
@@ -51,11 +49,8 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "gateway_prod" {
   transit_gateway_id = aws_ec2_transit_gateway.prod.id
   vpc_id             = module.gateway_prod.vpc_id
 
-  tags = {
-    Name      = "gateway_prod"
-    Terraform = "true"
-    env       = "production"
-  }
+  tags = var.tags
+
 }
 
 resource "aws_ec2_transit_gateway_route" "default_nat_gateway" {

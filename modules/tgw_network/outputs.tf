@@ -243,5 +243,5 @@ output "azs" {
 
 output "name" {
   description = "The name of the VPC specified as argument to this module"
-  value       = "${var.project_tags.project_name}-vpc"
+  value       = "${var.tags.project_name}-vpc"
 }

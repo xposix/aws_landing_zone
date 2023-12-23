@@ -11,13 +11,6 @@ locals {
     "clz_clz_aws_readonly_access"
   ]
 
-  project_tags = {
-    project_name = local.account_name
-    repo         = "github.com/xposix/aws_landing_zone"
-    Terraform    = "true"
-    environment  = "live"
-  }
-
   account_id = [
     for a in data.aws_organizations_organization.my_organisation.accounts :
     a["id"]

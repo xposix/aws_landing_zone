@@ -8,5 +8,5 @@ resource "aws_dynamodb_table" "terraform_locks_local_projects" {
     type = "S"
   }
 
-  tags = var.project_tags
+  tags = var.tags
 }

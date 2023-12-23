@@ -5,9 +5,9 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "new_vpc" {
   transit_gateway_id = data.aws_ec2_transit_gateway.prod[0].id
   vpc_id             = module.vpc.vpc_id
 
-  tags = merge(var.project_tags,
+  tags = merge(var.tags,
     {
-      Name = var.project_tags.project_name
+      Name = var.tags.project_name
     }
   )
 }
@@ -20,9 +20,9 @@ resource "aws_ec2_transit_gateway_vpc_attachment_accepter" "new_vpc" {
   transit_gateway_default_route_table_association = false
   transit_gateway_default_route_table_propagation = true
 
-  tags = merge(var.project_tags,
+  tags = merge(var.tags,
     {
-      Name = var.project_tags.project_name
+      Name = var.tags.project_name
     }
   )
 }
