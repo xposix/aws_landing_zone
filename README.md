@@ -19,7 +19,10 @@ Deployment Process
 ------------------
 
 1. Go to the file `general.tfvars` in the root directory and fill the default options for all deployments.
-2. On the master account, deploy the content of the `clz-tfstate` directory.
+2. Look into the `/accounts` directory and delete the accounts that are not needed. 
+   1. Remember to update the general `Makefile` removing the accounts references there too.
+3. Search across all the files for `TO_FILL`, it will point to parts of the files you probably need to pay attention to.
+4. On the management account, deploy the content of the `clz-tfstate` directory, this will create the first bucket that will contain the CLZ terraform state. All the other components' deployments will use S3 to store their TF states.
 
 New Account Procedure
 ---------------------
@@ -30,9 +33,9 @@ New Account Procedure
 
     This will create all the terraform file to create default configuration.
 
-2.	Commit and merge/apply the Master account directory only.
+2.	Commit and merge/apply the Management account directory only.
 
-3.	Once the Master account directory has been applied, add the new account number to the table below then commit the new account directory and create CI build step. Then merge/apply.
+3.	Once the Management account directory has been applied, add the new account number to the table below then commit the new account directory and create CI build step. Then merge/apply.
 
 4.	Manual Steps to ensure account is secure:
 
