@@ -35,19 +35,19 @@ variable "n_of_AZs" {
   }
 }
 
-variable "project_tags" {
-  type        = map
+variable "tags" {
+  type        = map(any)
   description = "A key/value map containing tags to add to all resources"
 }
 
 variable "public_subnet_tags" {
-  type        = map
+  type        = map(any)
   description = "A key/value map containing additional tags to add to the public subnets"
   default     = {}
 }
 
 variable "private_subnet_tags" {
-  type        = map
+  type        = map(any)
   description = "A key/value map containing additional tags to add to the private subnets"
   default     = {}
 }

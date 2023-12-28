@@ -86,7 +86,7 @@ resource "aws_config_organization_managed_rule" "cloud_trail_enabled" {
 
   input_parameters = <<EOF
 {
-  "s3BucketName" : "${local.cloudtrail_master_global_org_bucket}"
+  "s3BucketName" : "${local.cloudtrail_management_global_org_bucket}"
 }
 EOF
   # "snsTopicArn" : ""

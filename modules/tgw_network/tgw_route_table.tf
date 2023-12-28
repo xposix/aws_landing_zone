@@ -4,9 +4,9 @@ resource "aws_ec2_transit_gateway_route_table" "new_vpc" {
   provider           = aws.network
   transit_gateway_id = data.aws_ec2_transit_gateway.prod[0].id
 
-  tags = merge(var.project_tags,
+  tags = merge(var.tags,
     {
-      Name = var.project_tags.project_name
+      Name = var.tags.project_name
     }
   )
 }

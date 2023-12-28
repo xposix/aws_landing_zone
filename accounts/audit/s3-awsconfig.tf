@@ -1,9 +1,9 @@
 locals {
-  awsconfig_master_global_org_name = "{COMPANY_PREFIX}-awsconfig-master-global-org"
+  awsconfig_management_global_org_name = "{COMPANY_PREFIX}-awsconfig-management-global-org"
 }
 
-resource "aws_s3_bucket" "awsconfig_master_global_org" {
-  bucket        = local.awsconfig_master_global_org_name
+resource "aws_s3_bucket" "awsconfig_management_global_org" {
+  bucket        = local.awsconfig_management_global_org_name
   force_destroy = true
 
 
@@ -28,8 +28,8 @@ resource "aws_s3_bucket" "awsconfig_master_global_org" {
   }
 }
 
-resource "aws_s3_bucket_policy" "awsconfig_master_global_org" {
-  bucket = aws_s3_bucket.awsconfig_master_global_org.id
+resource "aws_s3_bucket_policy" "awsconfig_management_global_org" {
+  bucket = aws_s3_bucket.awsconfig_management_global_org.id
 
   policy = <<POLICY
 {
@@ -44,7 +44,7 @@ resource "aws_s3_bucket_policy" "awsconfig_master_global_org" {
         ]
       },
       "Action": "s3:GetBucketAcl",
-      "Resource": "${aws_s3_bucket.awsconfig_master_global_org.arn}",
+      "Resource": "${aws_s3_bucket.awsconfig_management_global_org.arn}",
       "Condition": {
         "Bool": {
           "aws:SecureTransport": "true"
@@ -60,7 +60,7 @@ resource "aws_s3_bucket_policy" "awsconfig_master_global_org" {
         ]
       },
       "Action": "s3:PutObject",
-      "Resource": "${aws_s3_bucket.awsconfig_master_global_org.arn}/v1/AWSLogs/*",
+      "Resource": "${aws_s3_bucket.awsconfig_management_global_org.arn}/v1/AWSLogs/*",
       "Condition": {
         "StringEquals": {
           "s3:x-amz-acl": "bucket-owner-full-control"
@@ -77,7 +77,7 @@ resource "aws_s3_bucket_policy" "awsconfig_master_global_org" {
         "AWS": "*"
       },
       "Action": "s3:*",
-      "Resource": "${aws_s3_bucket.awsconfig_master_global_org.arn}/*",
+      "Resource": "${aws_s3_bucket.awsconfig_management_global_org.arn}/*",
       "Condition": {
         "Bool": {
           "aws:SecureTransport": "false"

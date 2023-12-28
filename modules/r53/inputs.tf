@@ -1,6 +1,6 @@
 data "aws_region" "current" {}
 
-data "aws_organizations_organization" "my_organisation" { provider = aws.master }
+data "aws_organizations_organization" "my_organisation" { provider = aws.management }
 
 variable "main_r53_zone_name" {
   description = "Main zone name in the Network account"
@@ -12,8 +12,8 @@ variable "dns_subdomain" {
   type        = string
 }
 
-variable "project_tags" {
-  type        = map
+variable "tags" {
+  type        = map(any)
   description = "A key/value map containing tags to be added to all resources"
 }
 

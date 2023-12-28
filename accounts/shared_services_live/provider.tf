@@ -1,6 +1,6 @@
 # AWS Provider Configuration
 provider "aws" {
-  region = local.region
+  region = var.primary_region
 
   assume_role {
     role_arn = local.assume_role_arn
@@ -10,15 +10,15 @@ provider "aws" {
 # AWS network Provider Configuration
 provider "aws" {
   alias  = "network"
-  region = local.region
+  region = var.primary_region
 
   assume_role {
     role_arn = local.network_assume_role_arn
   }
 }
 
-# AWS Master Provider Configuration
+# AWS Management Account Provider Configuration
 provider "aws" {
-  alias  = "master"
-  region = local.region
+  alias  = "management"
+  region = var.primary_region
 }

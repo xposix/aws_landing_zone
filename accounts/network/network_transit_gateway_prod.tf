@@ -8,11 +8,7 @@ resource "aws_ec2_transit_gateway" "prod" {
   default_route_table_association = "enable"
   default_route_table_propagation = "enable"
 
-  tags = {
-    Name    = "transit_gateway_prod"
-    env     = "production"
-    account = "network"
-  }
+  tags = var.tags
 }
 
 resource "aws_ram_principal_association" "transit_gateway_prod" {
@@ -29,9 +25,6 @@ resource "aws_ram_resource_share" "transit_gateway_prod" {
   name                      = "transit_gateway_prod"
   allow_external_principals = false
 
-  tags = {
-    Name    = "transit_gateway_prod"
-    env     = "production"
-    account = "network"
-  }
+  tags = var.tags
+
 }

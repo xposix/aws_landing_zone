@@ -15,4 +15,4 @@ locals {
   aws_cidr_range = "10.1.0.0/11"
 }
 
-data "aws_organizations_organization" "my_organisation" { provider = aws.master }
+data "aws_organizations_organization" "my_organisation" { provider = aws.management }

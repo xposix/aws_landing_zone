@@ -2,7 +2,7 @@ module "dns" {
   source             = "../../modules/r53"
   main_r53_zone_name = local.company_dns_domain
   dns_subdomain      = local.dns_subdomain
-  project_tags       = local.project_tags
+  tags               = var.tags
 }
 
 output "dns_servers" {

@@ -3,8 +3,6 @@ locals {
   # Account settings
   account_name  = "shared_services_live"
   dns_subdomain = "live.services"
-  region        = "eu-west-1"
-  backup_region = "eu-west-2"
 
   # IAM settings
   iam_roles_to_deploy = [
@@ -12,13 +10,6 @@ locals {
     "clz_clz_aws_mini_admin_access",
     "clz_clz_aws_readonly_access"
   ]
-
-  project_tags = {
-    project_name = local.account_name
-    repo         = "github.com/xposix/aws_landing_zone"
-    Terraform    = "true"
-    environment  = "live"
-  }
 
   account_id = [
     for a in data.aws_organizations_organization.my_organisation.accounts :
@@ -43,4 +34,4 @@ locals {
   }
 }
 
-data "aws_organizations_organization" "my_organisation" { provider = aws.master }
+data "aws_organizations_organization" "my_organisation" { provider = aws.management }

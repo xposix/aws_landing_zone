@@ -6,7 +6,7 @@ output "source_bucket_arn" {
 
 output "replication_bucket_arn" {
   description = "ARN of the bucket containing the replicated files"
-  value       = aws_s3_bucket.replication_destination.arn
+  value       = var.enable_replication ? aws_s3_bucket.replication_destination[0].arn : ""
 }
 
 output "source_bucket_kms_key_arn" {

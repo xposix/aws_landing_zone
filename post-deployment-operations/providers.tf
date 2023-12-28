@@ -10,12 +10,12 @@ output "account_ids" {
 }
 
 provider "aws" {
-  region = local.region
+  region = var.primary_region
 }
 
 
 provider "aws" {
-  region = local.region
+  region = var.primary_region
   alias  = "shared_services_live"
   assume_role {
     role_arn = "arn:aws:iam::${local.account_ids["shared_services_live"]}:role/OrganizationAccountAccessRole"
@@ -23,7 +23,7 @@ provider "aws" {
 }
 
 provider "aws" {
-  region = local.region
+  region = var.primary_region
   alias  = "shared_services_non_live"
   assume_role {
     role_arn = "arn:aws:iam::${local.account_ids["shared_services_non_live"]}:role/OrganizationAccountAccessRole"
@@ -31,7 +31,7 @@ provider "aws" {
 }
 
 provider "aws" {
-  region = local.region
+  region = var.primary_region
   alias  = "sandbox"
   assume_role {
     role_arn = "arn:aws:iam::${local.account_ids["sandbox"]}:role/OrganizationAccountAccessRole"
@@ -41,7 +41,7 @@ provider "aws" {
 # AWS Backup Account Provider Configuration
 provider "aws" {
   alias  = "backup_primary_region"
-  region = local.region
+  region = var.primary_region
 
   assume_role {
     role_arn = "arn:aws:iam::${local.backup_account_id}:role/OrganizationAccountAccessRole"
@@ -50,7 +50,7 @@ provider "aws" {
 
 provider "aws" {
   alias  = "backup_secondary_region"
-  region = local.secondary_region
+  region = var.secondary_region
 
   assume_role {
     role_arn = "arn:aws:iam::${local.backup_account_id}:role/OrganizationAccountAccessRole"
