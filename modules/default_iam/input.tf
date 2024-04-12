@@ -1,6 +1,6 @@
 variable "roles" {
   description = "A list of the roles that should be deployed by this module"
-  type        = list
+  type        = list(any)
   default     = []
 }
 
@@ -28,8 +28,8 @@ variable "saml_metadata_document_path" {
 #   description = "The google client id passed from the aws-credentials-broker"
 # }
 
-variable "master_account_id" {
-  description = "The account number of master/organisations root"
+variable "management_account_id" {
+  description = "The account number of management/organisations root"
   default     = ""
 }
 

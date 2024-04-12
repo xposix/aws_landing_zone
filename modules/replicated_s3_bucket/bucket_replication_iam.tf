@@ -1,4 +1,5 @@
 resource "aws_iam_role" "replication" {
+  count       = var.enable_replication ? 1 : 0
   name_prefix = "${substr(var.bucket_name, 0, 20)}-replication"
   description = "Allow S3 to assume the role for replication"
 
@@ -20,6 +21,7 @@ POLICY
 }
 
 resource "aws_iam_policy" "replication" {
+  count       = var.enable_replication ? 1 : 0
   name_prefix = "${var.bucket_name}-replicationpolicy"
   description = "Allows reading for replication."
 
@@ -55,7 +57,7 @@ resource "aws_iam_policy" "replication" {
         "s3:ReplicateDelete"
       ],
       "Effect": "Allow",
-      "Resource": "${aws_s3_bucket.replication_destination.arn}/*"
+      "Resource": "${aws_s3_bucket.replication_destination[0].arn}/*"
     }
     %{if var.enable_kms}
     ,{
@@ -80,7 +82,7 @@ resource "aws_iam_policy" "replication" {
         "StringLike": {
           "kms:ViaService": "s3.${var.backup_region}.amazonaws.com",
           "kms:EncryptionContext:aws:s3:arn": [
-            "${aws_s3_bucket.replication_destination.arn}/*"
+            "${aws_s3_bucket.replication_destination[0].arn}/*"
           ]
         }
       },
@@ -95,7 +97,8 @@ POLICY
 }
 
 resource "aws_iam_policy_attachment" "replication" {
+  count      = var.enable_replication ? 1 : 0
   name       = "${var.bucket_name}_bucket_projects_aws_rep"
-  roles      = [aws_iam_role.replication.name]
-  policy_arn = aws_iam_policy.replication.arn
+  roles      = [aws_iam_role.replication[0].name]
+  policy_arn = aws_iam_policy.replication[0].arn
 }

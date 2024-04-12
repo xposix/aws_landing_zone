@@ -42,7 +42,7 @@ module "vpc" {
   version    = "2.33.0"
   create_vpc = true
 
-  name = "${var.project_tags.project_name}-${var.vpc_name}"
+  name = "${var.tags.project_name}-${var.vpc_name}"
   cidr = var.vpc_cidr
 
   enable_dns_hostnames = true
@@ -60,7 +60,7 @@ module "vpc" {
   public_subnets   = var.n_of_AZs == 3 ? local.public_subnets_count3 : local.public_subnets_count2
   database_subnets = var.n_of_AZs == 3 ? local.database_subnets_count3 : local.database_subnets_count2
 
-  tags                = var.project_tags
+  tags                = var.tags
   public_subnet_tags  = var.public_subnet_tags
   private_subnet_tags = var.private_subnet_tags
 }

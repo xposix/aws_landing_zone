@@ -19,8 +19,8 @@ variable "bucket_purpose" {
   default     = "local-projects"
 }
 
-variable "project_tags" {
-  type        = map(any)
+variable "tags" {
+  type        = any
   description = "A key/value map containing tags to add to all resources"
   # EXAMPLE
   # default = {
@@ -28,6 +28,12 @@ variable "project_tags" {
   #   repo        = "github.com/xposix/aws_landing_zone/local_projects"
   #   environment = "production"
   # }
+}
+
+variable "enable_replication" {
+  description = "Enable replication to the backup account"
+  type        = bool
+  default     = false
 }
 
 variable "enable_kms" {

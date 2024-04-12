@@ -1,7 +1,7 @@
 module "default_iam" {
   source = "../../modules/default_iam"
 
-  aws_organizations_accounts = aws_organizations_organization.my_organisation.non_master_accounts
+  aws_organizations_accounts = aws_organizations_organization.my_organisation.non_management_accounts
 
   # TO_FILL
   roles = [
